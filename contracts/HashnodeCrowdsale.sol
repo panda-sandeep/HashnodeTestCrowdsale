@@ -9,7 +9,7 @@ contract HashnodeCrowdsale is CappedCrowdsale, RefundableCrowdsale {
   // ICO Stage
   // ============
   enum CrowdsaleStage { PreICO, ICO }
-  CrowdsaleStage public stage;
+  CrowdsaleStage public stage = CrowdsaleStage.PreICO;
   // =============
 
   // Token Distribution
@@ -126,8 +126,7 @@ contract HashnodeCrowdsale is CappedCrowdsale, RefundableCrowdsale {
   }
   // ===============================
 
-  // REMOVE THIS FUNCTION ONCE YOUR TEST SUCCEEDS
-  // AND YOU ARE READY FOR PRODUCTION
+  // REMOVE THIS FUNCTION ONCE YOU ARE READY FOR PRODUCTION
   // USEFUL FOR TESTING `finish()` FUNCTION
   function hasEnded() public view returns (bool) {
     return true;

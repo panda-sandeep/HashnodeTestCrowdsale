@@ -1,6 +1,6 @@
 var HDWalletProvider = require("truffle-hdwallet-provider");
-var infura_apikey = "KbQuP7xkP1ZYNhJkUOXF";
-var mnemonic = "choose outside situate equip fortune outdoor swap region trip frown daughter figure";
+var infura_apikey = "KbQuP7xkP1ZYNhJkUOXF"; // Either use this key or get yours at https://infura.io/signup. It's free.
+var mnemonic = "rail fix box entry ride afraid actress rabbit below mistake type develop";
 
 module.exports = {
   networks: {
@@ -8,13 +8,12 @@ module.exports = {
       host: "localhost",
       port: 7545,
       gas: 6500000,
-      network_id: "5777", // Match any network id,
-      from: '0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef'
+      network_id: "5777"
     },
     ropsten:  {
       provider: new HDWalletProvider(mnemonic, "https://ropsten.infura.io/" + infura_apikey),
       network_id: 3,
-      gas: 4600000
+      gas: 4500000
     }
   }
 };

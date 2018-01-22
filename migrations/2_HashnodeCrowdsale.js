@@ -1,6 +1,14 @@
 var HashnodeCrowdsale = artifacts.require("./HashnodeCrowdsale.sol");
 
 module.exports = function(deployer) {
-  const startTime = web3.eth.getBlock(web3.eth.blockNumber).timestamp + 1;
-  deployer.deploy(HashnodeCrowdsale, startTime, startTime + (86400 * 20), 2, "0x627306090abaB3A6e1400e9345bC60c78a8BEf57", 2000000000000000000, 20000000000000000000);
+  const startTime = Math.round((new Date(Date.now() - 86400000).getTime())/1000); // Yesterday
+  const endTime = Math.round((new Date().getTime() + (86400000 * 20))/1000); // Today + 20 days
+  deployer.deploy(HashnodeCrowdsale, 
+    startTime, 
+    endTime,
+    5, 
+    "0x5AEDA56215b167893e80B4fE645BA6d5Bab767DE", // Replace this wallet address with the last one (10th account) from Ganache UI. This will be treated as the beneficiary address. 
+    2000000000000000000, // 2 ETH
+    20000000000000000000 // 20 ETH
+  );
 };

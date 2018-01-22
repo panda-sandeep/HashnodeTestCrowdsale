@@ -32,12 +32,12 @@ contract('HashnodeCrowdsale', function(accounts) {
 
     it('should transfer the ETH to wallet immediately in Pre ICO', function(done){
         HashnodeCrowdsale.deployed().then(async function(instance) {
-            let balanceOfBeneficiary = await web3.eth.getBalance('0x627306090abaB3A6e1400e9345bC60c78a8BEf57');
+            let balanceOfBeneficiary = await web3.eth.getBalance(accounts[9]);
             balanceOfBeneficiary = Number(balanceOfBeneficiary.toString(10));
             
             await instance.sendTransaction({ from: accounts[1], value: web3.toWei(2, "ether")});
             
-            let newBalanceOfBeneficiary = await web3.eth.getBalance('0x627306090abaB3A6e1400e9345bC60c78a8BEf57');
+            let newBalanceOfBeneficiary = await web3.eth.getBalance(accounts[9]);
             newBalanceOfBeneficiary = Number(newBalanceOfBeneficiary.toString(10));
 
             assert.equal(newBalanceOfBeneficiary, balanceOfBeneficiary + 2000000000000000000, 'ETH couldn\'t be transferred to the beneficiary');
@@ -45,15 +45,10 @@ contract('HashnodeCrowdsale', function(accounts) {
        });
     });
 
-    it('should refund ETH if limit is hit during PreICO', function(done){
+    it('should set variable `totalWeiRaisedDuringPreICO` correctly', function(done){
         HashnodeCrowdsale.deployed().then(async function(instance) {
-            await instance.sendTransaction({ from: accounts[7], value: web3.toWei(1, "ether")}); // Total Supply is now 20 HTs (limit hit)
-            
-            let oldBalance = await web3.eth.getBalance(accounts[7]);
-            var data = await instance.sendTransaction({ from: accounts[7], value: web3.toWei(3, "ether")}); // Try sending more ETH
-            let newBalance = await web3.eth.getBalance(accounts[7]);
-
-            assert.equal(oldBalance.toNumber() - newBalance.toNumber() >= web3.eth.getTransaction(data.tx).gasPrice.toNumber() * data.receipt.cumulativeGasUsed, true, 'ETH wasn\'t refunded');
+            var amount = await instance.totalWeiRaisedDuringPreICO.call();
+            assert.equal(amount.toNumber(), web3.toWei(3, "ether"), 'Total ETH raised in PreICO was not calculated correctly');
             done();
        });
     });
@@ -91,16 +86,16 @@ contract('HashnodeCrowdsale', function(accounts) {
 
     it('Vault balance should be added to our wallet once ICO is over', function(done){
         HashnodeCrowdsale.deployed().then(async function(instance) {
-            let balanceOfBeneficiary = await web3.eth.getBalance('0x627306090abaB3A6e1400e9345bC60c78a8BEf57');
-            balanceOfBeneficiary = Number(balanceOfBeneficiary.toString(10));
+            let balanceOfBeneficiary = await web3.eth.getBalance(accounts[9]);
+            balanceOfBeneficiary = balanceOfBeneficiary.toNumber();
 
             var vaultAddress = await instance.vault.call();
             let vaultBalance = await web3.eth.getBalance(vaultAddress);
             
-            await instance.finish('0x627306090abaB3A6e1400e9345bC60c78a8BEf57', '0x627306090abaB3A6e1400e9345bC60c78a8BEf57', '0x627306090abaB3A6e1400e9345bC60c78a8BEf57');
+            await instance.finish(accounts[0], accounts[1], accounts[2]);
             
-            let newBalanceOfBeneficiary = await web3.eth.getBalance('0x627306090abaB3A6e1400e9345bC60c78a8BEf57');
-            newBalanceOfBeneficiary = Number(newBalanceOfBeneficiary.toString(10));
+            let newBalanceOfBeneficiary = await web3.eth.getBalance(accounts[9]);
+            newBalanceOfBeneficiary = newBalanceOfBeneficiary.toNumber();
 
             assert.equal(newBalanceOfBeneficiary, balanceOfBeneficiary + vaultBalance.toNumber(), 'Vault balance couldn\'t be sent to the wallet');
             done();
