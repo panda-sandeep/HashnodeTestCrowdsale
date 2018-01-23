@@ -1,6 +1,6 @@
 var HDWalletProvider = require("truffle-hdwallet-provider");
 var infura_apikey = "KbQuP7xkP1ZYNhJkUOXF"; // Either use this key or get yours at https://infura.io/signup. It's free.
-var mnemonic = "rail fix box entry ride afraid actress rabbit below mistake type develop";
+var mnemonic = "<REPLACE THIS WITH YOUR METAMASK SEED PHRASES>";
 
 module.exports = {
   networks: {
@@ -14,6 +14,12 @@ module.exports = {
       provider: new HDWalletProvider(mnemonic, "https://ropsten.infura.io/" + infura_apikey),
       network_id: 3,
       gas: 4500000
+    }
+  },
+  solc: {
+    optimizer: {
+      enabled: true,
+      runs: 200
     }
   }
 };
